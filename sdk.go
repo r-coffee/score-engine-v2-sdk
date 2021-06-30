@@ -37,11 +37,11 @@ func CreateScoreEngine(host, pathToCert string, port int) *ScoreEngineSDKClient 
 	return &sdk
 }
 
-// Append will write a new row to the table
-func (s *ScoreEngineSDKClient) TennisMatches(tournamentID int64, category, round string) error {
+// TennisMatches returns a list of tennis matches for a given tournament
+func (s *ScoreEngineSDKClient) TennisMatches(tournamentID int64, category, round string) ([]*TennisMatchTuple, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	_, err := s.stub.TennisMatches(ctx, &TennisMatchesRequest{TournamentID: tournamentID, Category: category, Round: round})
-	return err
+	resp, err := s.stub.TennisMatches(ctx, &TennisMatchesRequest{TournamentID: tournamentID, Category: category, Round: round})
+	return resp.Matches, err
 }
