@@ -43,5 +43,9 @@ func (s *ScoreEngineSDKClient) TennisMatches(tournamentID int64, category, round
 	defer cancel()
 
 	resp, err := s.stub.TennisMatches(ctx, &TennisMatchesRequest{TournamentID: tournamentID, Category: category, Round: round})
-	return resp.Matches, err
+	if resp != nil {
+		return resp.Matches, err
+	}
+
+	return nil, err
 }
